@@ -2,7 +2,9 @@ package school.redrover.runner;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 
 import java.lang.reflect.Method;
 
@@ -35,7 +37,8 @@ public abstract class BaseTest {
     private void stopDriver() {
         try {
             JenkinsUtils.logout(driver);
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
 
         closeDriver();
     }
@@ -66,9 +69,7 @@ public abstract class BaseTest {
 
     @AfterMethod
     protected void afterMethod(Method method, ITestResult testResult) {
-        if (testResult.isSuccess() || ProjectUtils.closeBrowserIfError()) {
-            stopDriver();
-        }
+        stopDriver();
 
         ProjectUtils.logf("Execution time is %o sec\n\n", (testResult.getEndMillis() - testResult.getStartMillis()) / 1000);
     }
